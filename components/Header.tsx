@@ -6,7 +6,7 @@ export default function Header() {
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-14">
           <Link href="/" className="font-bold text-lg text-gray-900 hover:text-blue-600 transition-colors">
-            🇹🇼 台灣週報趨勢
+            🇹🇼 走吧 Zou Ba
           </Link>
           <nav className="flex items-center gap-6 text-sm font-medium text-gray-600">
             <Link href="/" className="hover:text-gray-900 transition-colors">

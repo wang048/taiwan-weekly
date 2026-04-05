@@ -4,9 +4,9 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "本週台灣趨勢 | 台灣週報趨勢",
+  title: "本週台灣趨勢 | 走吧 Zou Ba",
   description:
-    "每週精選台灣各平台熱門趨勢，涵蓋 PTT、Google 趨勢、新聞媒體等多元來源。",
+    "走吧 Zou Ba — 每週精選台灣各平台熱門趨勢，涵蓋 PTT、Google 趨勢、新聞媒體等多元來源。",
 };
 
 const SOURCE_LABEL: Record<string, string> = {

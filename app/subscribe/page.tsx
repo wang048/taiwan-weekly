@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "訂閱電子報",
-  description: "訂閱台灣週報趨勢電子報，每週直送最新台灣熱門話題整理到您的信箱。",
+  description: "訂閱走吧 Zou Ba 電子報，每週直送最新台灣熱門話題整理到您的信箱。",
 };
 
 export default function SubscribePage() {
@@ -14,7 +14,7 @@ export default function SubscribePage() {
       </p>
       {/* Buttondown embed */}
       <form
-        action="https://buttondown.com/api/emails/embed-subscribe/taiwan-weekly"
+        action="https://buttondown.com/api/emails/embed-subscribe/zoubo"
         method="post"
         target="popupwindow"
         className="flex flex-col sm:flex-row gap-3 justify-center"
