@@ -1,65 +1,194 @@
-import Image from "next/image";
+import { getTrends } from "@/lib/trends";
+import { getAllPosts } from "@/lib/posts";
+import Link from "next/link";
+import type { Metadata } from "next";
 
-export default function Home() {
+export const metadata: Metadata = {
+  title: "本週台灣趨勢 | 台灣週報趨勢",
+  description:
+    "每週精選台灣各平台熱門趨勢，涵蓋 PTT、Google 趨勢、新聞媒體等多元來源。",
+};
+
+const SOURCE_LABEL: Record<string, string> = {
+  PTT: "PTT",
+  "Google Trends": "Google 趨勢",
+  巴哈姆特: "巴哈姆特",
+  ETtoday: "ETtoday",
+  UDN: "聯合新聞網",
+  LTN: "自由時報",
+};
+
+function formatDate(iso: string) {
+  const d = new Date(iso);
+  return d.toLocaleString("zh-TW", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    timeZone: "Asia/Taipei",
+  });
+}
+
+export default function HomePage() {
+  const trends = getTrends();
+  const posts = getAllPosts().slice(0, 3);
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      {/* Hero */}
+      <section className="mb-10">
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">本週台灣趨勢</h1>
+        {trends ? (
+          <p className="text-gray-500 text-sm">
+            {trends.week} · 更新時間：{formatDate(trends.generated_at)} ·{" "}
+            {trends.total_items} 則熱門話題
           </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+        ) : (
+          <p className="text-gray-500 text-sm">載入趨勢資料中…</p>
+        )}
+      </section>
+
+      {trends && (
+        <>
+          {/* Top Cross-Platform */}
+          <section className="mb-12">
+            <h2 className="text-xl font-semibold text-gray-800 mb-4">
+              🔥 跨平台熱門 Top 20
+            </h2>
+            <ol className="space-y-2">
+              {trends.top_50_cross_platform.slice(0, 20).map((item, i) => (
+                <li
+                  key={i}
+                  className="flex items-start gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                >
+                  <span className="flex-none w-7 h-7 flex items-center justify-center rounded-full bg-blue-100 text-blue-700 text-xs font-bold mt-0.5">
+                    {i + 1}
+                  </span>
+                  <div className="flex-1 min-w-0">
+                    <a
+                      href={item.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-gray-900 hover:text-blue-600 font-medium text-sm leading-snug line-clamp-2 transition-colors"
+                    >
+                      {item.title}
+                    </a>
+                    <div className="flex items-center gap-2 mt-1">
+                      <span className="text-xs text-gray-400">
+                        {SOURCE_LABEL[item.source] ?? item.source}
+                      </span>
+                      {item.category && (
+                        <>
+                          <span className="text-gray-300">·</span>
+                          <span className="text-xs text-gray-400">
+                            {item.category}
+                          </span>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                  <span className="flex-none text-xs text-gray-400 mt-1">
+                    {Math.round(item.score)}分
+                  </span>
+                </li>
+              ))}
+            </ol>
+          </section>
+
+          {/* Per-Platform */}
+          <section className="mb-12">
+            <h2 className="text-xl font-semibold text-gray-800 mb-4">
+              📊 各平台熱門 Top 5
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {Object.entries(trends.platform_rankings).map(
+                ([source, items]) => (
+                  <div
+                    key={source}
+                    className="border border-gray-200 rounded-xl p-4"
+                  >
+                    <h3 className="font-semibold text-gray-700 mb-3 text-sm">
+                      {SOURCE_LABEL[source] ?? source}
+                    </h3>
+                    <ol className="space-y-2">
+                      {items.slice(0, 5).map((item, i) => (
+                        <li key={i} className="flex items-start gap-2">
+                          <span className="flex-none text-xs text-gray-400 w-4 mt-0.5">
+                            {i + 1}.
+                          </span>
+                          <a
+                            href={item.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-sm text-gray-800 hover:text-blue-600 line-clamp-1 transition-colors"
+                          >
+                            {item.title}
+                          </a>
+                        </li>
+                      ))}
+                    </ol>
+                  </div>
+                )
+              )}
+            </div>
+          </section>
+
+          {/* Category Summary */}
+          <section className="mb-12">
+            <h2 className="text-xl font-semibold text-gray-800 mb-4">
+              🏷️ 話題分類
+            </h2>
+            <div className="flex flex-wrap gap-2">
+              {Object.entries(trends.category_summary)
+                .slice(0, 20)
+                .map(([cat, count]) => (
+                  <span
+                    key={cat}
+                    className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-gray-100 text-gray-700 text-xs font-medium"
+                  >
+                    {cat}
+                    <span className="text-gray-400 ml-1">{count}</span>
+                  </span>
+                ))}
+            </div>
+          </section>
+        </>
+      )}
+
+      {/* Blog Posts */}
+      {posts.length > 0 && (
+        <section>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-semibold text-gray-800">
+              📝 最新文章
+            </h2>
+            <Link
+              href="/blog"
+              className="text-sm text-blue-600 hover:underline"
+            >
+              查看全部 →
+            </Link>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {posts.map((post) => (
+              <Link
+                key={post.slug}
+                href={`/blog/${post.slug}`}
+                className="block border border-gray-200 rounded-xl p-4 hover:border-blue-300 hover:shadow-sm transition-all"
+              >
+                <p className="text-xs text-gray-400 mb-1">{post.date}</p>
+                <h3 className="font-semibold text-gray-900 text-sm leading-snug mb-2">
+                  {post.title}
+                </h3>
+                <p className="text-xs text-gray-500 line-clamp-3">
+                  {post.excerpt}
+                </p>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
     </div>
   );
 }
