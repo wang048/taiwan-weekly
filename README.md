@@ -1,36 +1,42 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 走吧 Zou Ba — 台灣週報趨勢
 
-## Getting Started
+台灣第一個資料驅動的跨格式週報，追蹤 PTT、Google Trends、巴哈姆特等平台的熱門話題。
 
-First, run the development server:
+**🌐 Live:** https://taiwan-weekly.vercel.app
+
+## 技術架構
+
+- **框架**: Next.js 16 (App Router) + TypeScript
+- **樣式**: Tailwind CSS v3
+- **內容**: MDX 文章（存於 `posts/` 目錄）
+- **部署**: Vercel
+- **電子報**: Buttondown（slug: `taiwan-weekly`）
+
+## 本地開發
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+開啟 http://localhost:3000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 新增文章
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+在 `posts/` 目錄建立新的 `.mdx` 檔案：
 
-## Learn More
+```md
+---
+title: "文章標題"
+date: "2026-04-12"
+description: "文章描述"
+---
 
-To learn more about Next.js, take a look at the following resources:
+文章內容...
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 部署
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+vercel --prod
+```
