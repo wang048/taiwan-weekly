@@ -2,7 +2,7 @@
 
 台灣第一個資料驅動的跨格式週報，追蹤 PTT、Google Trends、巴哈姆特等平台的熱門話題。
 
-**🌐 Live:** https://zouba.vercel.app
+**🌐 Live:** https://zoubo.vercel.app
 
 ## 技術架構
 
